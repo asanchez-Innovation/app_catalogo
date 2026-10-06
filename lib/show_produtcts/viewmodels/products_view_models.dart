@@ -1,13 +1,18 @@
-import 'package:app_catalogo/show_produtcts/models/tipo_product.dart';
 import 'package:app_catalogo/show_produtcts/services/get_products_service.dart';
 import 'package:app_catalogo/show_produtcts/models/product.dart';
+import 'package:flutter/material.dart';
 
-class ProductsViewModel {
-  var _getProductsService = GetProductsService();
+class ProductsViewModel extends ChangeNotifier {
+  final GetProductsService _getProductsService = GetProductsService();
   List<Product> products = [];
 
-  Future<List<Product>> getProducts() async {
+  Future<void> getProducts() async {
     products = await _getProductsService.getProducts();
-    return products;
+    notifyListeners(); // Notifica a la interfaz que se cargaron los productos
+  }
+
+  Future<Product?> getProductById(String id) async {
+    await Future.delayed(const Duration(seconds: 5));
+    return products.firstWhere((product) => product.id == id);
   }
 }
